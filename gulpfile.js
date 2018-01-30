@@ -1,18 +1,18 @@
-var gulp = require('gulp'),
-    gulpif = require('gulp-if'),
-    useref = require('gulp-useref'),
-    uglify = require('gulp-uglify'),
-    cleanCss = require('gulp-clean-css'),
-    htmlmin = require('gulp-htmlmin'),
-    saveLicense = require('uglify-save-license'),
-    gulpFilter = require('gulp-filter'),
-    imagemin = require('gulp-imagemin'),
-    pngquant = require('imagemin-pngquant'),
-    del = require('del'),
-    jsonminify = require('gulp-jsonminify'),
-    eslint = require('gulp-eslint');
-    sass = require('gulp-sass');
-    babel = require('gulp-babel');
+const gulp = require('gulp');
+const gulpif = require('gulp-if');
+const useref = require('gulp-useref');
+const uglify = require('gulp-uglify');
+const cleanCss = require('gulp-clean-css');
+const htmlmin = require('gulp-htmlmin');
+const saveLicense = require('uglify-save-license');
+const gulpFilter = require('gulp-filter');
+const imagemin = require('gulp-imagemin');
+const pngquant = require('imagemin-pngquant');
+const del = require('del');
+const jsonminify = require('gulp-jsonminify');
+const eslint = require('gulp-eslint');
+const babel = require('gulp-babel');
+const autoprefixer = require('gulp-autoprefixer');
 
 gulp.task('html', function() {
     var cssFilter = gulpFilter(['**/*.css'], {restore: true});
@@ -23,11 +23,11 @@ gulp.task('html', function() {
         collapseWhitespace: true
     };
 
-    return gulp.src(['src/*.html', '!src/testdrive.html'])
+    return gulp.src(['src/*.html'])
         .pipe(useref())
-        .pipe(gulpif('*.js', babel({presets: ['env']})))
-        .pipe(gulpif('*.scss', sass().on('error', sass.logError)))
+        .pipe(gulpif('*.js', babel()))
         .pipe(gulpif('*.css', cleanCss()))
+        .pipe(gulpif('*.css', autoprefixer({browsers: ['last 2 versions'],cascade: false})))
         .pipe(gulpif('*.html', htmlmin(htmlOpt)))
         .pipe(gulp.dest('dist'));
 });
@@ -35,7 +35,6 @@ gulp.task('html', function() {
 gulp.task('images', function() {
     return gulp.src('src/img/**/*.{jpg,png,gif}')
         .pipe(imagemin([
-            //mozjpeg({quality: 60}),
             pngquant({quality: '20-80', verbose: true})
         ]))
         .on('error', function(err) {
