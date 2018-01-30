@@ -13,22 +13,24 @@ const jsonminify = require('gulp-jsonminify');
 const eslint = require('gulp-eslint');
 const babel = require('gulp-babel');
 const autoprefixer = require('gulp-autoprefixer');
+const usemin = require('gulp-usemin');
+const sass = require('gulp-sass');
 
 gulp.task('html', function() {
-    var cssFilter = gulpFilter(['**/*.css'], {restore: true});
-    var jsFilter = gulpFilter(['**/*.js', '!libs.js'], {restore: true});
-    var htmlFilter = gulpFilter(['*.html'], {restore: true});
-
-    var htmlOpt = {
-        collapseWhitespace: true
-    };
-
     return gulp.src(['src/*.html'])
-        .pipe(useref())
-        .pipe(gulpif('*.js', babel()))
-        .pipe(gulpif('*.css', cleanCss()))
-        .pipe(gulpif('*.css', autoprefixer({browsers: ['last 2 versions'],cascade: false})))
-        .pipe(gulpif('*.html', htmlmin(htmlOpt)))
+        // .pipe(useref())
+        // .pipe(gulpif('*.js', babel()))
+        // .pipe(gulpif('*.css', cleanCss()))
+        // .pipe(gulpif('*.css', autoprefixer({browsers: ['last 2 versions'],cascade: false})))
+        // .pipe(gulpif('*.html', htmlmin(htmlOpt)))
+        .pipe(usemin({
+          scss: [ sass({outputStyle: 'compressed'}) ,autoprefixer({browsers: ['last 2 versions'],cascade: false})],
+          css: [ cleanCss(),autoprefixer({browsers: ['last 2 versions'],cascade: false})],
+          js: [ babel({presets: ['env']}),uglify() ],
+          html: [ htmlmin({ collapseWhitespace: true }) ],
+          // inlinejs: [babel() ],
+          // inlinecss: [ sass(), 'concat' ]
+        }))
         .pipe(gulp.dest('dist'));
 });
 
