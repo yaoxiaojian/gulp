@@ -1,7 +1,7 @@
 (function(window, document) {
     // 给hotcss开辟个命名空间，别问我为什么，我要给你准备你会用到的方法，免得用到的时候还要自己写。
-    const hotcss = {}
-;(function() {
+    const hotcss = {};
+    (function() {
         // 根据devicePixelRatio自定计算scale
         // 可以有效解决移动端1px这个世纪难题。
         let viewportEl = document.querySelector("meta[name=\"viewport\"]"),
@@ -14,8 +14,8 @@
 
         // 允许通过自定义name为hotcss的meta头，通过initial-dpr来强制定义页面缩放
         if (hotcssEl) {
-            const hotcssCon = hotcssEl.getAttribute("content")
-;if (hotcssCon) {
+            const hotcssCon = hotcssEl.getAttribute("content");
+            if (hotcssCon) {
                 const initialDprMatch = hotcssCon.match(/initial\-dpr=([\d\.]+)/)
                 if (initialDprMatch) {
                     dpr = parseFloat(initialDprMatch[1])
@@ -43,8 +43,8 @@
         hotcss.designWidth = designWidth // 保证px2rem 和 rem2px 不传第二个参数时, 获取hotcss.designWidth是undefined导致的NaN
 
         let scale = 1 / dpr,
-            content = `width=device-width, initial-scale=${scale}, minimum-scale=${scale}, maximum-scale=${scale}, user-scalable=no`
-;if (viewportEl) {
+            content = `width=device-width, initial-scale=${scale}, minimum-scale=${scale}, maximum-scale=${scale}, user-scalable=no`;
+            if (viewportEl) {
             viewportEl.setAttribute("content", content)
         }
         else {

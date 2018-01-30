@@ -1,1 +1,2 @@
-import css from '../css/reset.scss'
+var a=1;
+var b=2;
